@@ -15,6 +15,7 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
+
 def get_db():
     db = SessionLocal()
     try:
@@ -22,18 +23,24 @@ def get_db():
     finally:
         db.close()
 
+
 @app.get("/", response_class=HTMLResponse)
 def read_root(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
+
 @app.get("/marathons/", response_model=list[schemas.Marathon])
-def read_marathons(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+def read_marathons(skip: int = 0, limit: int = 10, 
+                   db: Session = Depends(get_db)):
     marathons = crud.get_marathons(db, skip=skip, limit=limit)
     return marathons
 
+
 @app.post("/marathons/", response_model=schemas.Marathon)
-def create_marathon(marathon: schemas.MarathonCreate, db: Session = Depends(get_db)):
+def create_marathon(marathon: schemas.MarathonCreate,
+                    db: Session = Depends(get_db)):
     return crud.create_marathon(db=db, marathon=marathon)
+
 
 @app.get("/marathons/{marathon_id}", response_model=schemas.Marathon)
 def read_marathon(marathon_id: int, db: Session = Depends(get_db)):
@@ -41,6 +48,7 @@ def read_marathon(marathon_id: int, db: Session = Depends(get_db)):
     if marathon is None:
         raise HTTPException(status_code=404, detail="Marathon not found")
     return marathon
+
 
 @app.get("/calendar_events/", response_model=List[dict])
 def get_calendar_events(db: Session = Depends(get_db)):
