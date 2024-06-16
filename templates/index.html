@@ -1,18 +1,43 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Marathon Schedule</title>
-    <link rel="stylesheet" href="/static/css/styles.css">
+    <meta charset="utf-8">
+    <title>Marathon Schedule Calendar</title>
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+        #calendar {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>Marathon Schedule</h1>
-    </header>
-    <main>
-        <ul id="schedule-list"></ul>
-    </main>
-    <script src="/static/js/scripts.js"></script>
+    <h1>Marathon Schedule Calendar</h1>
+    <div id="calendar"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                events: '/calendar_events/',
+                eventClick: function(info) {
+                    info.jsEvent.preventDefault(); // don't let the browser navigate
+
+                    if (info.event.url) {
+                        window.open(info.event.url);
+                    }
+                }
+            });
+
+            calendar.render();
+        });
+    </script>
 </body>
 </html>

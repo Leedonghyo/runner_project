@@ -6,6 +6,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
 from fastapi import Request
+from typing import List
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -40,3 +41,16 @@ def read_marathon(marathon_id: int, db: Session = Depends(get_db)):
     if marathon is None:
         raise HTTPException(status_code=404, detail="Marathon not found")
     return marathon
+
+@app.get("/calendar_events/", response_model=List[dict])
+def get_calendar_events(db: Session = Depends(get_db)):
+    marathons = crud.get_marathons(db)
+    events = [
+        {
+            "title": marathon.name,
+            "start": marathon.date.isoformat(),
+            "url": marathon.homepage
+        }
+        for marathon in marathons
+    ]
+    return events
