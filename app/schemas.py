@@ -4,8 +4,11 @@ from datetime import date
 class MarathonBase(BaseModel):
     name: str
     date: date
-    overview: str
-    route: str
+    region: str
+    address: str
+    event: str
+    homepage: str
+
 
 class MarathonCreate(MarathonBase):
     pass
