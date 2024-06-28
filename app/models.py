@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, Date, UniqueConstraint
 from .database import Base
 
+
 class Marathon(Base):
     # 컬럼: 대회명, 대회날짜, 대회지역, 대회 장소, 개최 종목, 홈페이지
     __tablename__ = "MARATON_SCHEDULE"
