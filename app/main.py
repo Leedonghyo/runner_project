@@ -1,12 +1,16 @@
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
-from . import crud, models, schemas
-from .database import SessionLocal, engine
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
 from fastapi import Request
 from typing import List
+
+from . import crud, models, schemas
+from .database import SessionLocal, engine
+
+import uvicorn
+
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -68,3 +72,7 @@ def get_calendar_events(db: Session = Depends(get_db)):
         for marathon in marathons
     ]
     return events
+
+
+if __name__ == "__main__":
+    uvicorn.run(app, host='0.0.0.0', port=8000)

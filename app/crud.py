@@ -11,7 +11,7 @@ def get_marathons(db: Session, skip: int = 0, limit: int = 10):
 
 
 def create_marathon(db: Session, marathon: schemas.MarathonCreate):
-    db_marathon = models.Marathon(**marathon.dict())
+    db_marathon = models.Marathon(**marathon.model_dump())
     db.add(db_marathon)
     db.commit()
     db.refresh(db_marathon)
