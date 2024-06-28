@@ -29,8 +29,14 @@ def read_root(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 
+@app.get("/marathons_schedule", response_class=HTMLResponse)
+def show_marathons_schedule(request: Request):
+    return templates.TemplateResponse("marathons_schedule.html",
+                                      {"request": request})
+
+
 @app.get("/marathons/", response_model=list[schemas.Marathon])
-def read_marathons(skip: int = 0, limit: int = 10, 
+def read_marathons(skip: int = 0, limit: int = 10,
                    db: Session = Depends(get_db)):
     marathons = crud.get_marathons(db, skip=skip, limit=limit)
     return marathons
