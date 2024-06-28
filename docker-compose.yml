@@ -1,0 +1,35 @@
+services:
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb
+    networks:
+      - backnet
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: runners
+      MYSQL_USER: donghyo
+      MYSQL_PASSWORD: tndtnd12
+    ports:
+      - 3306:3306
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  app:
+    build:
+      context: .
+    depends_on:
+      - mariadb
+    networks:
+      - backnet
+    environment:
+      DATABASE_URL: mysql+pymysql://root:root@mariadb/runners
+    ports:
+      - 8000:8000
+    volumes:
+      - .:/runners
+
+volumes:
+  mysql_data:
+
+networks:
+  backnet:
